@@ -1,9 +1,16 @@
-import { Text, View } from 'react-native';
+import { LoadingIndicator } from '@components/Loading/styles';
+import { View } from 'react-native';
+import { ThemeProvider } from 'styled-components/native';
+
+import theme from './src/theme';
 
 export default function App() {
   return (
-    <View style={{ flex: 1, backgroundColor: '#121214' }}>
-     
-    </View>
+
+    <ThemeProvider theme={theme}>
+      <View>
+        <LoadingIndicator />
+      </View>
+    </ThemeProvider>
   );
 }
