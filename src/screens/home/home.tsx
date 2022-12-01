@@ -95,6 +95,21 @@ export default function Home(){
                       />
 
                   </CardList>  
+
+                  <CardList>
+
+                      <CardTitle>
+                        Grátis para assistir      
+                      </CardTitle>
+
+                      <FlatList
+                        data={data}
+                        keyExtractor={(item) => item.id}
+                        horizontal
+                        renderItem={({item}) => <Card data={item}/>}
+                      />
+
+                  </CardList>  
                   
             </ContainerCard>
 

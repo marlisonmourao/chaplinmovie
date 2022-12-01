@@ -4,7 +4,7 @@ export const ContainerMain = styled.SafeAreaView`
 flex:1;
 background-color: ${({ theme }) => theme.colors.blue_900};
 align-items: center;
-padding: 10px;
+padding: 20px;
 
 `;
 ////////////// Header ///////////////
@@ -12,7 +12,7 @@ padding: 10px;
 export const ContainerHeader = styled.View`
 width: 100%;
 height: 130px;
-margin: 25px;
+margin: 35px;
 border-radius: 15px;
 justify-content: space-between;
 flex-direction: column;
@@ -78,10 +78,10 @@ flex: 1;
 `;
 
 export const CardList = styled.View`
-height: 235px;
+height: 240px;
 width:100%;
 border-radius: 15px;
-margin-bottom: 20px;
+margin-bottom: 30px;
 `;
 export const CardTitle = styled.Text`
 color: ${({ theme }) => theme.colors.white};
