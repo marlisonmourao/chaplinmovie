@@ -45,7 +45,7 @@ font-size: 22px;
 `;
 
 export const PhotoUser = styled.TouchableOpacity`
-width: 70px;
+width: 50px;
 height: 50px;
 align-items: flex-end;
 justify-content: center;
