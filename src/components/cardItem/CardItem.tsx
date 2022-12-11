@@ -8,8 +8,17 @@ import {
 } from "./cardStyle";
 import StarIcon from '@expo/vector-icons/AntDesign';
 
+interface CardItemProps {
+  title: string;
+  studio: string;
+  nota: string;
+}
 
-export default function Card(props: { data: { title: string; studio: string;  nota: string}; }){
+interface Props {
+  data: CardItemProps;
+}
+
+export default function Card({data}: Props){
     return(
         <Cards>
         <CardPoster >
@@ -18,8 +27,8 @@ export default function Card(props: { data: { title: string; studio: string;  no
 
         <CardDescription>
           
-           <TitleMidia>{props.data.title}</TitleMidia>
-           <TextStudio>{props.data.studio}</TextStudio>
+           <TitleMidia>{data.title}</TitleMidia>
+           <TextStudio>{data.studio}</TextStudio>
            <TextNote>
 
             <StarIcon
@@ -27,7 +36,7 @@ export default function Card(props: { data: { title: string; studio: string;  no
               size={15} 
               color='#7BF4BA'
             />
-            {props.data.nota}
+            {data.nota}
 
           </TextNote>
        
