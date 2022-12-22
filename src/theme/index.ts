@@ -11,6 +11,8 @@ export default {
     blue_800: '#0F1516',
     blue_900: '#0B0F10',
 
-    green_700: '#7BF4BA'
+    green_700: '#7BF4BA',
+
+    attention_light: "rgba(232, 63, 91, 0.5)",
   }
 };
