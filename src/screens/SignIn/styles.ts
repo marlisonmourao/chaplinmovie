@@ -29,19 +29,6 @@ export const ContainerForm = styled.View`
   margin-top: 16px;
 `;
 
-export const Inputs = styled.TextInput`
-  width: 100%;
-  height: 56px;
-
-  background-color: ${({ theme }) => theme.colors.gray_300};
-  color: ${({ theme }) => theme.colors.gray_500};
-  font-size: 16px;
-
-  border-radius: 6px;
-  margin-bottom: 16px;
-  padding: 16px;
-`;
-
 export const ButtonSignin = styled(TouchableOpacity)`
   width: 100%;
   height: 56px;

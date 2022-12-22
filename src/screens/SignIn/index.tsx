@@ -1,7 +1,12 @@
+import { ScrollView } from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+
 import {
   ButtonSignin,
   Container,
-  Inputs,
   TextButton,
   ContainerForm,
   Heading,
@@ -10,21 +15,73 @@ import {
 
 import logoSignin from "@assets/Logo.png";
 
+import { InputSignin } from '@components/InputsSignin'
+
+type FormDataProps = {
+  email: string;
+  password: string;
+}
+
+const signinSchema = yup.object({
+  email: yup.string().required('Informe o e-mail').email('E-mail inválido'),
+  password: yup.string().required('Informe a senha'),
+})
+
 export function SignIn() {
+  const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
+    resolver: yupResolver(signinSchema)
+  });
+
+  function handleSignin(data: FormDataProps) {
+    console.log(data)
+  }
+
   return (
-    <Container>
-      <Logo source={logoSignin} />
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <Container>
+        <Logo source={logoSignin} />
 
-      <Heading>Acesse sua conta</Heading>
+        <Heading>Acesse sua conta</Heading>
 
-      <ContainerForm>
-        <Inputs placeholder="E-mail" />
-        <Inputs placeholder="Senha" />
+        <ContainerForm>
+          <Controller 
+            control={control}
+            name="email"
+            render={({ field: {onChange, value} }) => (
+              <InputSignin 
+                placeholder="E-mail" 
+                onChangeText={onChange}
+                value={value}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                error={errors.email && errors.email?.message}
+              />
+            )}
+          />
 
-        <ButtonSignin>
-          <TextButton>Acessar</TextButton>
-        </ButtonSignin>
-      </ContainerForm>
-    </Container>
+          <Controller 
+            control={control}
+            name="password"
+            render={({ field: {onChange, value} }) => (
+              <InputSignin 
+                placeholder="Senha" 
+                secureTextEntry
+                onChangeText={onChange}
+                value={value}
+                onSubmitEditing={handleSubmit(handleSignin)}
+                returnKeyType="send"
+                error={errors.password && errors.password?.message}
+              />
+            )}
+          />
+
+
+
+          <ButtonSignin onPress={handleSubmit(handleSignin)}>
+            <TextButton>Acessar</TextButton>
+          </ButtonSignin>
+        </ContainerForm>
+      </Container>
+    </ScrollView>
   );
 }
