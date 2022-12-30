@@ -5,13 +5,11 @@ import { AuthRoutes } from '@routes/auth.routes';
 import { useAuth } from '@hooks/useAuth';
 
 export function Routes() {
-const { user } = useAuth()
-
-  console.log("USUÁRIO LOGADO =>", user)
+const { token } = useAuth()
 
   return(
     <NavigationContainer>
-      <AuthRoutes />
+      {token ? <AppRoute /> : <AuthRoutes />}
     </NavigationContainer>
   )
 }

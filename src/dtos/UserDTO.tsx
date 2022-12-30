@@ -1,6 +1,6 @@
+import { string } from "yup";
+
 export type UserDTO = {
-  id: string;
-  name: string;
-  email: string;
-  avatarUrl: string;
-}
+    username: string;
+    request_token: string
+};
