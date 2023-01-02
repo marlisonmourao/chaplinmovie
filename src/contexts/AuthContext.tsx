@@ -1,11 +1,12 @@
+import { useToast, Toast } from 'native-base'
 import { Alert } from 'react-native';
 import { createContext, ReactNode, useState } from 'react';
 
 import { api, apiKey } from '../service/api';
+import { AppError } from '@utils/AppError';
 
 import { UserDTO } from '@dtos/UserDTO';
 
-import axios from 'axios';
 
 export type AuthContextDataProps = {
   user: UserDTO;
@@ -48,9 +49,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
          setToken(response.data)
       })
     } catch (error) {
-      if(axios.isAxiosError(error)) {
-        Alert.alert(error.response?.data.status_message);
-      }
+      const isAppError = error instanceof AppError;
     }
   }
 

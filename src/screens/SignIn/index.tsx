@@ -37,8 +37,13 @@ export function SignIn() {
   });
 
 
-  function handleSignin({ email, password }: FormDataProps) {
-    signIn(email, password);
+  async function handleSignin({ email, password }: FormDataProps) {
+    try {
+      signIn(email, password);
+    }
+    catch (error) {
+
+    }
   }
 
   useEffect(() => {
