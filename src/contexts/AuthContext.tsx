@@ -1,12 +1,11 @@
-import { useToast, Toast } from 'native-base'
-import { Alert } from 'react-native';
 import { createContext, ReactNode, useState } from 'react';
+import { useToast } from 'native-base';
+import { useTheme } from 'styled-components';
 
 import { api, apiKey } from '../service/api';
 import { AppError } from '@utils/AppError';
 
 import { UserDTO } from '@dtos/UserDTO';
-
 
 export type AuthContextDataProps = {
   user: UserDTO;
@@ -25,7 +24,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [ user, setUser ] = useState<UserDTO>({} as UserDTO);
   const [requestToken, setRequestToken] = useState('');
   const [token, setToken] = useState('');
-
 
   async function getToken() {
    try {
@@ -49,7 +47,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
          setToken(response.data)
       })
     } catch (error) {
-      const isAppError = error instanceof AppError;
+      throw error;
     }
   }
 
