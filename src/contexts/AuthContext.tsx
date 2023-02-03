@@ -1,17 +1,15 @@
 import { createContext, ReactNode, useState } from 'react';
-import { useToast } from 'native-base';
-import { useTheme } from 'styled-components';
 
 import { api, apiKey } from '../service/api';
-import { AppError } from '@utils/AppError';
 
 import { UserDTO } from '@dtos/UserDTO';
+
 
 export type AuthContextDataProps = {
   user: UserDTO;
   signIn: (email: string, password: string) => void;
   getToken: () => void;
-  token: string
+  token: string;
 }
 
 type AuthContextProviderProps = {
@@ -43,8 +41,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       }).then(async response => {
          await api.post(`/authentication/session/new?api_key=${apiKey}`, {
           request_token: requestToken
-         })
-         setToken(response.data)
+        })
+        setToken(response.data.request_token)
       })
     } catch (error) {
       throw error;

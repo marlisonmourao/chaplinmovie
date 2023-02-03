@@ -52,7 +52,8 @@ export function SignIn() {
     }
     catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError ? error.message : 'Não foi possível efetuar o login. Tente novamente mais tarde.';
+      const title = isAppError ? error.message 
+      : 'Não foi possível efetuar o login. Tente novamente mais tarde.';
 
       toast.show({
         title,
