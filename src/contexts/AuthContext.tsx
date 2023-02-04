@@ -10,7 +10,7 @@ export type AuthContextDataProps = {
   user: UserDTO;
   signIn: (email: string, password: string) => void;
   getToken: () => void;
-  token: string;
+  session_id: string;
   isLoadingTokenStorageData: boolean
 }
 
@@ -23,7 +23,7 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [ user, setUser ] = useState<UserDTO>({} as UserDTO);
   const [requestToken, setRequestToken] = useState('');
-  const [token, setToken] = useState('');
+  const [session_id, setSession_id] = useState('')
   const [isLoadingTokenStorageData, setIsLoadingTokenStorageData] = useState(true)
 
   async function getToken() {
@@ -37,29 +37,37 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function signIn(email: string, password: string) {
     try {
-      await api.post(`/authentication/token/validate_with_login?api_key=${apiKey}&language=pt-BR`, {
+     const response = await api.post(`/authentication/token/validate_with_login?api_key=${apiKey}&language=pt-BR`, {
         username: email,
         password: password,
         request_token: requestToken
-      }).then(async response => {
-         await api.post(`/authentication/session/new?api_key=${apiKey}`, {
-          request_token: requestToken
-        })
-        setToken(response.data.request_token)
-        storageTokenSave(token)
       })
+
+      validateToken(response.data.request_token)
+
     } catch (error) {
       throw error;
     }
   }
 
+  async function validateToken(requestToken: string) {
+    const { data } = await api.post(`/authentication/session/new?api_key=${apiKey}`, {
+      request_token: requestToken
+    })
+    
+    if(data.session_id) {
+        setSession_id(data.session_id) 
+        storageTokenSave(data.session_id)
+      }
+  }
+
   async function loadTokenData() { 
     try {
+      setIsLoadingTokenStorageData(true)
       const userLogged = await storageTokenGet()
 
       if(userLogged) {
-        setToken(userLogged)
-        setIsLoadingTokenStorageData
+        setSession_id(userLogged)
       }
       
     } catch (error) {
@@ -78,7 +86,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       user, 
       signIn, 
       getToken, 
-      token, 
+      session_id, 
       isLoadingTokenStorageData 
     }}>
       {children}

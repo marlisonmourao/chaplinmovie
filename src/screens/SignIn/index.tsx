@@ -23,6 +23,7 @@ import { AppError } from '@utils/AppError';
 
 import { InputSignin } from '@components/InputsSignin';
 import { Loading } from '@components/Loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type FormDataProps = {
   email: string;
@@ -67,6 +68,7 @@ export function SignIn() {
 
   useEffect(() => {
     getToken()
+    AsyncStorage.clear()
   }, [])
 
   return (

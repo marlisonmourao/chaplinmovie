@@ -8,7 +8,8 @@ import { useAuth } from '@hooks/useAuth';
 import { Loading } from '@components/Loading';
 
 export function Routes() {
-const { token, isLoadingTokenStorageData } = useAuth()
+const { session_id, isLoadingTokenStorageData } = useAuth()
+console.log("SESSIONID", session_id)
 
 if(isLoadingTokenStorageData) {
   return <Loading />
@@ -16,7 +17,7 @@ if(isLoadingTokenStorageData) {
 
   return(
     <NavigationContainer>
-      {token ? <AppRoute /> : <AuthRoutes />}
+      {session_id ? <AppRoute /> : <AuthRoutes />}
     </NavigationContainer>
   )
 }
