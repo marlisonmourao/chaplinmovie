@@ -29,8 +29,6 @@ export default function Home() {
 
   const { token } = useAuth()
 
-  console.log(token)
-
   return (
     <ContainerMain>
       <ContainerHeader>

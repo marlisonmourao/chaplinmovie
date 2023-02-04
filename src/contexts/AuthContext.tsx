@@ -3,7 +3,6 @@ import { createContext, ReactNode, useEffect, useState } from 'react';
 import { api, apiKey } from '../service/api';
 
 import { UserDTO } from '@dtos/UserDTO';
-import { UserTokenDTO } from '@dtos/tokenDTO';
 import { storageTokenSave, storageTokenGet } from '@storage/storageUser';
 
 
@@ -11,7 +10,8 @@ export type AuthContextDataProps = {
   user: UserDTO;
   signIn: (email: string, password: string) => void;
   getToken: () => void;
-  token: UserTokenDTO;
+  token: string;
+  isLoadingTokenStorageData: boolean
 }
 
 type AuthContextProviderProps = {
@@ -22,8 +22,9 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [ user, setUser ] = useState<UserDTO>({} as UserDTO);
-  const [requestToken, setRequestToken] = useState();
-  const [token, setToken] = useState<UserTokenDTO>({} as UserTokenDTO);
+  const [requestToken, setRequestToken] = useState('');
+  const [token, setToken] = useState('');
+  const [isLoadingTokenStorageData, setIsLoadingTokenStorageData] = useState(true)
 
   async function getToken() {
    try {
@@ -44,28 +45,42 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
          await api.post(`/authentication/session/new?api_key=${apiKey}`, {
           request_token: requestToken
         })
-        setToken(response.data)
-        // storageTokenSave(response.data)
+        setToken(response.data.request_token)
+        storageTokenSave(token)
       })
     } catch (error) {
       throw error;
     }
   }
 
-  // async function loadTokenData() {
-  //   const userLogged = await storageTokenGet()
+  async function loadTokenData() { 
+    try {
+      const userLogged = await storageTokenGet()
 
-  //   if(userLogged) {
-  //     setToken(userLogged)
-  //   }
-  // }
+      if(userLogged) {
+        setToken(userLogged)
+        setIsLoadingTokenStorageData
+      }
+      
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoadingTokenStorageData(false)
+    }
+  }
 
-  // useEffect(() => {
-  //   loadTokenData()
-  // }, [])
+  useEffect(() => {
+    loadTokenData()
+  }, [])
 
   return(
-    <AuthContext.Provider value={{ user, signIn, getToken, token }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      signIn, 
+      getToken, 
+      token, 
+      isLoadingTokenStorageData 
+    }}>
       {children}
     </AuthContext.Provider>
   )
