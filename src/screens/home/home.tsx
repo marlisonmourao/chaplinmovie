@@ -16,6 +16,7 @@ import {
 import UserDefault from "@expo/vector-icons/EvilIcons";
 import SearchIcon from "@expo/vector-icons/EvilIcons";
 import Card from "@components/cardItem/CardItem";
+import { useAuth } from "@hooks/useAuth";
 
 export default function Home() {
   const data = [
@@ -25,6 +26,10 @@ export default function Home() {
     { id: "4", title: "Quadrinho", nota: "10", studio: "DC Comics" },
     { id: "5", title: "Batman", nota: "10", studio: "DC Comics" },
   ];
+
+  const { token } = useAuth()
+
+  console.log(token)
 
   return (
     <ContainerMain>

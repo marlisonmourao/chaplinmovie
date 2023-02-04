@@ -1,15 +1,17 @@
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 
 import { api, apiKey } from '../service/api';
 
 import { UserDTO } from '@dtos/UserDTO';
+import { UserTokenDTO } from '@dtos/tokenDTO';
+import { storageTokenSave, storageTokenGet } from '@storage/storageUser';
 
 
 export type AuthContextDataProps = {
   user: UserDTO;
   signIn: (email: string, password: string) => void;
   getToken: () => void;
-  token: string;
+  token: UserTokenDTO;
 }
 
 type AuthContextProviderProps = {
@@ -20,8 +22,8 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [ user, setUser ] = useState<UserDTO>({} as UserDTO);
-  const [requestToken, setRequestToken] = useState('');
-  const [token, setToken] = useState('');
+  const [requestToken, setRequestToken] = useState();
+  const [token, setToken] = useState<UserTokenDTO>({} as UserTokenDTO);
 
   async function getToken() {
    try {
@@ -42,12 +44,25 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
          await api.post(`/authentication/session/new?api_key=${apiKey}`, {
           request_token: requestToken
         })
-        setToken(response.data.request_token)
+        setToken(response.data)
+        // storageTokenSave(response.data)
       })
     } catch (error) {
       throw error;
     }
   }
+
+  // async function loadTokenData() {
+  //   const userLogged = await storageTokenGet()
+
+  //   if(userLogged) {
+  //     setToken(userLogged)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   loadTokenData()
+  // }, [])
 
   return(
     <AuthContext.Provider value={{ user, signIn, getToken, token }}>
