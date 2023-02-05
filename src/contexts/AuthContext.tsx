@@ -12,7 +12,7 @@ export type AuthContextDataProps = {
   isLoadingTokenStorageData: boolean
   signIn: (email: string, password: string) => Promise<void>;
   getToken: () => Promise<void>;
-  fecthDataUser: () => Promise<void>;
+  fetchDataUser: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -67,7 +67,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
-  async function fecthDataUser() {
+  async function fetchDataUser() {
       try {
         const { data } = await api.get(`account?api_key=${apiKey}&session_id=${session_id}`)
         setUser(data)
@@ -118,7 +118,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       getToken, 
       session_id, 
       isLoadingTokenStorageData,
-      fecthDataUser,
+      fetchDataUser,
       signOut
     }}>
       {children}

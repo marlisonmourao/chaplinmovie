@@ -24,7 +24,7 @@ import { useAuth } from "@hooks/useAuth";
 
 export default function Home() {
 
-  const { fecthDataUser, user, signOut } = useAuth()
+  const { fetchDataUser, user, signOut } = useAuth()
 
   const data = [
     { id: "1", title: "Batman", nota: "10", studio: "DC Comics" },
@@ -35,7 +35,7 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    fecthDataUser()
+    fetchDataUser()
   }, [])
 
   return (
