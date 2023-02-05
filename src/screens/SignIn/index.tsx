@@ -68,7 +68,7 @@ export function SignIn() {
 
   useEffect(() => {
     getToken()
-    AsyncStorage.clear()
+    // AsyncStorage.clear()
   }, [])
 
   return (

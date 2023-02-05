@@ -9,7 +9,6 @@ import { Loading } from '@components/Loading';
 
 export function Routes() {
 const { session_id, isLoadingTokenStorageData } = useAuth()
-console.log("SESSIONID", session_id)
 
 if(isLoadingTokenStorageData) {
   return <Loading />

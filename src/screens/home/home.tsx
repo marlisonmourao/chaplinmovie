@@ -1,4 +1,9 @@
+import { useEffect } from "react";
 import { FlatList } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import SearchIcon from "@expo/vector-icons/EvilIcons";
+import UserDefault from "@expo/vector-icons/EvilIcons";
+
 import {
   ContainerMain,
   ContainerHeader,
@@ -13,12 +18,15 @@ import {
   CardList,
   CardTitle,
 } from "./styleHome";
-import UserDefault from "@expo/vector-icons/EvilIcons";
-import SearchIcon from "@expo/vector-icons/EvilIcons";
+
 import Card from "@components/cardItem/CardItem";
+
 import { useAuth } from "@hooks/useAuth";
 
 export default function Home() {
+
+  const { fecthDataUser, user } = useAuth()
+
   const data = [
     { id: "1", title: "Batman", nota: "10", studio: "DC Comics" },
     { id: "2", title: "Godzilla", nota: "8.3", studio: "DC Comics" },
@@ -27,7 +35,13 @@ export default function Home() {
     { id: "5", title: "Batman", nota: "10", studio: "DC Comics" },
   ];
 
-  const { token } = useAuth()
+  // useEffect(() => {
+  //   AsyncStorage.clear()
+  // }, [])
+
+  useEffect(() => {
+    fecthDataUser()
+  }, [])
 
   return (
     <ContainerMain>
@@ -35,7 +49,7 @@ export default function Home() {
         <HeaderUser>
           <HelloUserName>
             <HelloText>
-              Olá, <UserName> Estêvão Angeluz </UserName>
+              Olá, <UserName>{user.name}</UserName>
             </HelloText>
           </HelloUserName>
 

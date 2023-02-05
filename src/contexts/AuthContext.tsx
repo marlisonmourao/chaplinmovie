@@ -8,10 +8,11 @@ import { storageTokenSave, storageTokenGet } from '@storage/storageUser';
 
 export type AuthContextDataProps = {
   user: UserDTO;
-  signIn: (email: string, password: string) => void;
-  getToken: () => void;
   session_id: string;
   isLoadingTokenStorageData: boolean
+  signIn: (email: string, password: string) => void;
+  getToken: () => void;
+  fecthDataUser: () => void
 }
 
 type AuthContextProviderProps = {
@@ -51,14 +52,29 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   async function validateToken(requestToken: string) {
-    const { data } = await api.post(`/authentication/session/new?api_key=${apiKey}`, {
-      request_token: requestToken
-    })
-    
-    if(data.session_id) {
-        setSession_id(data.session_id) 
-        storageTokenSave(data.session_id)
-      }
+    try {
+      const { data } = await api.post(`/authentication/session/new?api_key=${apiKey}`, {
+        request_token: requestToken
+      })
+      
+      if(data.session_id) {
+          setSession_id(data.session_id) 
+          storageTokenSave(data.session_id)
+        }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async function fecthDataUser() {
+      try {
+        const { data } = await api.get(`account?api_key=${apiKey}&session_id=${session_id}`)
+        setUser(data)
+        
+      } catch (error) { 
+        console.log(error)
+        throw error
+      }  
   }
 
   async function loadTokenData() { 
@@ -87,7 +103,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       signIn, 
       getToken, 
       session_id, 
-      isLoadingTokenStorageData 
+      isLoadingTokenStorageData,
+      fecthDataUser
     }}>
       {children}
     </AuthContext.Provider>
