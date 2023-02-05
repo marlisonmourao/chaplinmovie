@@ -3,16 +3,17 @@ import { createContext, ReactNode, useEffect, useState } from 'react';
 import { api, apiKey } from '../service/api';
 
 import { UserDTO } from '@dtos/UserDTO';
-import { storageTokenSave, storageTokenGet } from '@storage/storageUser';
+import { storageTokenSave, storageTokenGet, storageUserRemove } from '@storage/storageUser';
 
 
 export type AuthContextDataProps = {
   user: UserDTO;
   session_id: string;
   isLoadingTokenStorageData: boolean
-  signIn: (email: string, password: string) => void;
-  getToken: () => void;
-  fecthDataUser: () => void
+  signIn: (email: string, password: string) => Promise<void>;
+  getToken: () => Promise<void>;
+  fecthDataUser: () => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 type AuthContextProviderProps = {
@@ -77,6 +78,19 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       }  
   }
 
+  async function signOut() {
+    try {
+      setIsLoadingTokenStorageData(true)
+
+      setSession_id('')
+      await storageUserRemove()
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoadingTokenStorageData(false)
+    }
+  }
+
   async function loadTokenData() { 
     try {
       setIsLoadingTokenStorageData(true)
@@ -104,7 +118,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       getToken, 
       session_id, 
       isLoadingTokenStorageData,
-      fecthDataUser
+      fecthDataUser,
+      signOut
     }}>
       {children}
     </AuthContext.Provider>

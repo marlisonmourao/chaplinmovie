@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { FlatList } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import SearchIcon from "@expo/vector-icons/EvilIcons";
 import UserDefault from "@expo/vector-icons/EvilIcons";
 
@@ -25,7 +24,7 @@ import { useAuth } from "@hooks/useAuth";
 
 export default function Home() {
 
-  const { fecthDataUser, user } = useAuth()
+  const { fecthDataUser, user, signOut } = useAuth()
 
   const data = [
     { id: "1", title: "Batman", nota: "10", studio: "DC Comics" },
@@ -34,10 +33,6 @@ export default function Home() {
     { id: "4", title: "Quadrinho", nota: "10", studio: "DC Comics" },
     { id: "5", title: "Batman", nota: "10", studio: "DC Comics" },
   ];
-
-  // useEffect(() => {
-  //   AsyncStorage.clear()
-  // }, [])
 
   useEffect(() => {
     fecthDataUser()

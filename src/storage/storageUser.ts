@@ -14,3 +14,7 @@ export async function storageTokenGet() {
   return token
 }
 
+export async function storageUserRemove() {
+  await AsyncStorage.removeItem(USER_STORAGE)
+}
+
