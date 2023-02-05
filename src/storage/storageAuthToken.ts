@@ -1,13 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { USER_STORAGE } from './storageConfig'
+import { AUTH_TOKEN_STORAGE } from './storageConfig'
 
 export async function storageTokenSave(session_id: string){
-  await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(session_id));
+  await AsyncStorage.setItem(AUTH_TOKEN_STORAGE, JSON.stringify(session_id));
 }
 
 export async function storageTokenGet() {
-  const storage = await AsyncStorage.getItem(USER_STORAGE)
+  const storage = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE)
 
   const token = storage ? JSON.parse(storage) : null
 
@@ -15,6 +15,6 @@ export async function storageTokenGet() {
 }
 
 export async function storageUserRemove() {
-  await AsyncStorage.removeItem(USER_STORAGE)
+  await AsyncStorage.removeItem(AUTH_TOKEN_STORAGE)
 }
 

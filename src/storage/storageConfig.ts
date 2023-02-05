@@ -1,1 +1,1 @@
-export const USER_STORAGE = '@chaplinPlay:user'
+export const AUTH_TOKEN_STORAGE = '@chaplinPlay:user'

@@ -3,7 +3,7 @@ import { createContext, ReactNode, useEffect, useState } from 'react';
 import { api, apiKey } from '../service/api';
 
 import { UserDTO } from '@dtos/UserDTO';
-import { storageTokenSave, storageTokenGet, storageUserRemove } from '@storage/storageUser';
+import { storageTokenSave, storageTokenGet, storageUserRemove } from '@storage/storageAuthToken';
 
 
 export type AuthContextDataProps = {
@@ -52,6 +52,24 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  async function storageSessionId(token: string) {
+    try {
+      setIsLoadingTokenStorageData(true)
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+      await storageTokenSave(token)
+      setSession_id(token) 
+      
+    } catch (error) {
+      throw error;
+      
+    } finally {
+      setIsLoadingTokenStorageData(false)
+    }
+
+  }
+
   async function validateToken(requestToken: string) {
     try {
       const { data } = await api.post(`/authentication/session/new?api_key=${apiKey}`, {
@@ -59,8 +77,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       })
       
       if(data.session_id) {
-          setSession_id(data.session_id) 
-          storageTokenSave(data.session_id)
+          storageSessionId(data.session_id)
         }
     } catch (error) {
       throw error
