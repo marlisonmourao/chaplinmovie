@@ -52,22 +52,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
-  async function storageSessionId(token: string) {
-    try {
-      setIsLoadingTokenStorageData(true)
-
+  async function storageSessionIdUpdate(token: string) {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
-      await storageTokenSave(token)
       setSession_id(token) 
-      
-    } catch (error) {
-      throw error;
-      
-    } finally {
-      setIsLoadingTokenStorageData(false)
-    }
-
   }
 
   async function validateToken(requestToken: string) {
@@ -77,10 +65,16 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       })
       
       if(data.session_id) {
-          storageSessionId(data.session_id)
+          setIsLoadingTokenStorageData(true)
+
+          await storageTokenSave(data.session_id)
+
+          storageSessionIdUpdate(data.session_id)
         }
     } catch (error) {
       throw error
+    } finally {
+      setIsLoadingTokenStorageData(false)
     }
   }
 
@@ -114,7 +108,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const userLogged = await storageTokenGet()
 
       if(userLogged) {
-        setSession_id(userLogged)
+        storageSessionIdUpdate(userLogged)
       }
       
     } catch (error) {
