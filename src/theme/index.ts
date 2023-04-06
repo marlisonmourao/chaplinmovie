@@ -15,4 +15,4 @@ export default {
 
     attention_light: "rgba(232, 63, 91, 0.5)",
   }
-};
+} as const
